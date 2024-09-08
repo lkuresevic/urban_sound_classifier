@@ -1,6 +1,7 @@
-BATCH_SIZE = 4
+BATCH_SIZE = 32
 EPOCHS = 30
 LEARNING_RATE = 0.0001
+AUDIO_FILES = 8732
 
 ANNOTATIONS_FILE = "Data/UrbanSound8K/metadata/UrbanSound8K.csv"
 AUDIO_DIR = "Data/UrbanSound8K/audio"

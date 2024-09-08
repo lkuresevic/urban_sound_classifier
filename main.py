@@ -48,21 +48,21 @@ if __name__ == "__main__":
     num = 1
     # train networks
     # 1. CNN - custom
-    model_0 = CNN(input_size=1, hidden_size=16, output_size=10).to(device)
-    optimizer = torch.optim.Adam(params=model_0.parameters(), lr=LEARNING_RATE)
-    train(model_0, train_dataloader, loss_fn, optimizer, device, EPOCHS, num)
+    # model_0 = CNN(input_size=1, hidden_size=16, output_size=10).to(device)
+    # optimizer = torch.optim.Adam(params=model_0.parameters(), lr=LEARNING_RATE)
+    # train(model_0, train_dataloader, loss_fn, optimizer, device, EPOCHS, num)
     num+=1
     # 2. CNN - ResNet50
-    # model_1 = ResNet(Bottleneck, [3,4,6,3], 10, 1).to(device)
+    # model_1 = ResNet(Bottleneck, [3,4,6,3], 10).to(device)
     # optimizer = torch.optim.Adam(params=model_1.parameters(), lr=LEARNING_RATE)
     # train(model_1, train_dataloader, loss_fn, optimizer, device, EPOCHS, num)
     # 3. CNN - ResNet101
-    # model_2 = ResNet(Bottleneck, [3,4,23,3], num_classes, channels).to(device)
+    # model_2 = ResNet(Bottleneck, [3,4,23,3], 10).to(device)
     # optimizer = torch.optim.Adam(params=model_0, lr=LEARNING_RATE)
     # 4. LSTM - 128 units
-    # model_3 = LSTM(64, 256, 128, 10, device).to(device)
-    # optimizer = torch.optim.Adam(params=model_3.parameters(), lr=LEARNING_RATE)
-    # train(model_3, train_dataloader, loss_fn, optimizer, device, EPOCHS, num)
+    model_3 = LSTM(1, 256, 128, 10, device).to(device)
+    optimizer = torch.optim.Adam(params=model_3.parameters(), lr=LEARNING_RATE)
+    train(model_3, train_dataloader, loss_fn, optimizer, device, EPOCHS, num)
     # optimizer = torch.optim.Adam(params=model_0, lr=LEARNING_RATE)
     # 5. LSTM - 256 units
     # model_4 = LSTM(64, 256, 256, 10)

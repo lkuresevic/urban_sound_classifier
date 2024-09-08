@@ -4,6 +4,9 @@ import torch
 class CNN(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super().__init__()
+        
+        #model_0 = CNN(input_size=1, hidden_size=16, output_size=10)
+        #Torch([batch_size, 1, 64, 44]) input
         self.conv1 = nn.Sequential(
             nn.Conv2d(
                 in_channels=input_size,
@@ -63,9 +66,10 @@ class CNN(nn.Module):
         return predictions
 
 class ResNet(nn.Module):
-    def __init__(self, ResBlock, layer_list, num_classes, num_channels=3):
+    def __init__(self, ResBlock, layer_list, output_size):
         super(ResNet, self).__init__()
         self.in_channels = 64
+        num_channels = 1
         
         self.conv1 = nn.Conv2d(num_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
         self.batch_norm1 = nn.BatchNorm2d(64)
@@ -78,7 +82,7 @@ class ResNet(nn.Module):
         self.layer4 = self._make_layer(ResBlock, layer_list[3], planes=512, stride=2)
         
         self.avgpool = nn.AdaptiveAvgPool2d((1,1))
-        self.fc = nn.Linear(512*ResBlock.expansion, num_classes)
+        self.fc = nn.Linear(512*ResBlock.expansion, output_size)
         
     def forward(self, x):
         x = self.relu(self.batch_norm1(self.conv1(x)))

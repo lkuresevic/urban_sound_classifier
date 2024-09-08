@@ -1,6 +1,9 @@
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
+from math import ceil, floor
+
+from constants import *
 
 def accuracy_fn(y_true, y_pred):
     correct = torch.eq(y_true, y_pred).sum().item()
@@ -9,16 +12,18 @@ def accuracy_fn(y_true, y_pred):
     
 def train(model, data_loader, loss_fn, optimizer, device, epochs, num):
     results = []
-
+    train_batches = int(ceil((float(AUDIO_FILES/BATCH_SIZE))/2))
+    test_batches =  int(floor((float(AUDIO_FILES/BATCH_SIZE))/2))
+    
     for epoch in range(epochs):
         num = 0
         
         loss, acc, test_loss, test_acc = 0, 0, 0, 0
         for inpt, target in data_loader:
-            if num % 20 == 0:
-                print(f"{epoch}_{num}")
+            print(inpt.size())
+            print(f"{epoch}_{num}")
             inpt, target = inpt.to(device), target.to(device)
-            if num < 1750:
+            if num < train_batches:
                 model.train()
                 y_logits = model(inpt).squeeze()
                 y_pred = torch.argmax(torch.round(y_logits), dim=1)
@@ -43,10 +48,10 @@ def train(model, data_loader, loss_fn, optimizer, device, epochs, num):
                     test_acc += accuracy_fn(target, test_pred) 
             num += 1
         
-        loss = loss / 1750
-        acc = acc / 1750
-        test_loss = test_loss / 432
-        test_acc = test_acc / 432
+        loss = loss / train_batches
+        acc = acc / train_batches
+        test_loss = test_loss / test_batches
+        test_acc = test_acc / test_batches
         
         
         print(f"Epoch: {epoch} | Loss: {loss:.5f}, Accuracy: {acc:.2f}% | Test loss: {test_loss:.5f}, Test acc: {test_acc:.2f}%")

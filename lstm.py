@@ -9,6 +9,7 @@ class LSTM(nn.Module):
     
     def __init__(self, inpt_size, hidden_size, num_cells, output_size, dev):
         super(LSTM, self).__init__()
+        #Torch([batch_size, 1, 64, 44])
         self.inpt_size = inpt_size
         self.hidden_size = hidden_size
         self.num_cells = num_cells

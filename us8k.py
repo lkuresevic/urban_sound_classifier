@@ -6,8 +6,6 @@ import pandas as pd
 import torchaudio
 from constants import *
 
-
-
 class US8K(Dataset):
 
     def __init__(self,
