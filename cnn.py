@@ -37,21 +37,23 @@ class ResNet(nn.Module):
         
     def _make_layer(self, ResBlock, blocks, planes, stride=1):
         ii_downsample = None
-        layers = []
-        
-        if stride != 1 or self.in_channels != planes*ResBlock.expansion:
+
+        # If stride is not 1 or in_channels != planes * expansion, apply downsampling
+        if stride != 1 or self.in_channels != planes * ResBlock.expansion:
             ii_downsample = nn.Sequential(
-                nn.Conv2d(self.in_channels, planes*ResBlock.expansion, kernel_size=1, stride=stride),
-                nn.BatchNorm2d(planes*ResBlock.expansion)
+                nn.Conv2d(self.in_channels, planes * ResBlock.expansion, kernel_size=1, stride=stride),
+                nn.BatchNorm2d(planes * ResBlock.expansion)
             )
-            
+
+        layers = []
         layers.append(ResBlock(self.in_channels, planes, i_downsample=ii_downsample, stride=stride))
-        self.in_channels = planes*ResBlock.expansion
-        
-        for i in range(1, blocks):
+        self.in_channels = planes * ResBlock.expansion
+
+        for _ in range(1, blocks):
             layers.append(ResBlock(self.in_channels, planes))
-            
+
         return nn.Sequential(*layers)
+
     
 class Bottleneck(nn.Module):
     expansion = 4
@@ -93,28 +95,32 @@ class Block(nn.Module):
     expansion = 1
     def __init__(self, in_channels, out_channels, i_downsample=None, stride=1):
         super(Block, self).__init__()
-       
 
+        # Only the first conv layer needs stride
         self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1, stride=stride, bias=False)
         self.batch_norm1 = nn.BatchNorm2d(out_channels)
-        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1, stride=stride, bias=False)
+        
+        # Second conv layer always has stride=1
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1, stride=1, bias=False)
         self.batch_norm2 = nn.BatchNorm2d(out_channels)
 
         self.i_downsample = i_downsample
-        self.stride = stride
         self.relu = nn.ReLU()
 
     def forward(self, x):
-      identity = x.clone()
+        identity = x.clone()
 
-      x = self.relu(self.batch_norm2(self.conv1(x)))
-      x = self.batch_norm2(self.conv2(x))
-        
-      print("identity shape ", identity.shape)
-      while self.i_downsample is not None:
-          identity = self.i_downsample(identity)
-      print("x shape ", x.shape)
-      print("identity shape ", identity.shape)
-      x += identity
-      x = self.relu(x)
-      return x
+        # First convolution
+        x = self.relu(self.batch_norm1(self.conv1(x)))
+        # Second convolution
+        x = self.batch_norm2(self.conv2(x))
+
+        # Downsample identity if required
+        if self.i_downsample is not None:
+            identity = self.i_downsample(identity)
+
+        # Residual connection (add identity)
+        x += identity
+        x = self.relu(x)
+
+        return x

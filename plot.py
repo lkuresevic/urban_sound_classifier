@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
 import csv
 
-def plot_results(model_num):
+def plot_results(model_name):
     epochs, loss, acc, test_loss, test_acc = [], [], [], [], []
     
     # Open and read the CSV file
-    with open(f'Results/model_{model_num}_results.csv', 'r') as csvfile: 
+    with open(f'Results/' + model_name +'_results.csv', 'r') as csvfile: 
         data = csv.reader(csvfile, delimiter=',')
         
         # Read each row and convert to the appropriate data type
@@ -17,7 +17,6 @@ def plot_results(model_num):
                 test_loss.append(float(row[4]))
                 test_acc.append(float(row[5]))
             except ValueError:
-                print(f"Error converting row: {row}")
                 continue
 
     # Plotting the results
@@ -32,6 +31,3 @@ def plot_results(model_num):
     plt.legend()
     plt.grid(True)
     plt.show()
-
-if __name__ == "__main__":
-    plot_results(0)

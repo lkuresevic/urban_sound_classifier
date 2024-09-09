@@ -2,9 +2,9 @@ import torch
 from torch.autograd import Variable
 import torch.nn as nn
 
-class RNN(nn.Module):
+class LSTM(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, num_classes):
-        super(RNN, self).__init__()
+        super(LSTM, self).__init__()
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         self.lstm = nn.LSTM(input_size, self.hidden_size, self.num_layers, batch_first=True, dropout=0.2)
@@ -17,6 +17,7 @@ class RNN(nn.Module):
     def forward(self, x):
         x = x.squeeze()
         x = x.float()
+        torch.manual_seed(42)
         h0 = Variable(torch.rand(self.num_layers, x.size(0), self.hidden_size).float()).cuda() 
         c0 = Variable(torch.rand(self.num_layers, x.size(0), self.hidden_size).float()).cuda()
         out, _ = self.lstm(x, (h0,c0)) 

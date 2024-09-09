@@ -62,42 +62,38 @@ def train(model, dataset, loss_fn, optimizer, epochs, device, name):
     kf = PredefinedSplit(test_fold = folds)
     
     for fold, (train_idx, test_idx) in enumerate(kf.split(dataset)):
+    
         train_loader = DataLoader(
             dataset=dataset,
             batch_size=BATCH_SIZE,
-            sampler=torch.utils.data.SubsetRandomSampler(train_idx),
-        )
+            sampler=torch.utils.data.SubsetRandomSampler(train_idx))
         test_loader = DataLoader(
             dataset=dataset,
             batch_size=BATCH_SIZE,
-            sampler=torch.utils.data.SubsetRandomSampler(test_idx),
-        )    
-        #scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', patience = 2)
+            sampler=torch.utils.data.SubsetRandomSampler(test_idx))    
+ 
         for epoch in range(epochs):
             train_loss, train_acc = train_epoch(model, train_loader, loss_fn, optimizer, device)
             test_loss, test_acc = test_epoch(model, test_loader, loss_fn, device)
-            
-            # scheduler.step(loss / train_batches)
                 
             train_loss = train_loss / len(train_loader)
             train_acc = train_acc / len(train_loader)
             test_loss = test_loss / len(test_loader)
             test_acc = test_acc / len(test_loader)
             
-            print(f"Fold: {fold} | Epoch: {epoch} | Loss: {train_loss:.5f}, Accuracy: {train_acc:.2f}% | Test loss: {test_loss:.5f}, Test acc: {test_acc:.2f}%")
-            results.append([fold, epoch, train_loss.item(), train_acc, test_loss.item(), test_acc])
+            print(f"Fold: {fold+1} | Epoch: {epoch+1} | Loss: {train_loss:.5f}, Accuracy: {train_acc:.2f}% | Test loss: {test_loss:.5f}, Test acc: {test_acc:.2f}%")
+            results.append([fold+1, fold*epochs + epoch+1, train_loss.item(), train_acc, test_loss.item(), test_acc])
             
-    results_file = "Results/" + name + ".csv"
+    results_file = "Results/" + name + "_results.csv"
     
     eval_loader = DataLoader(
             dataset=dataset,
-            batch_size=BATCH_SIZE,
-        )    
+            batch_size=BATCH_SIZE)    
     eval_loss, eval_acc = test_epoch(model, eval_loader, loss_fn, device)
-    
-    eval_loss = eval_loss / len(test_loader)
-    eval_acc = eval_acc / len(test_loader)
+    eval_loss = eval_loss / len(eval_loader)
+    eval_acc = eval_acc / len(eval_loader)
     results.append([eval_loss.item(), eval_acc])
+        
     with open(results_file, "w", newline="") as file:
         csv_writer = csv.writer(file)
         csv_writer.writerows(results)
