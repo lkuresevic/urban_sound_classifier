@@ -20,7 +20,7 @@ def train_epoch(model, data_loader, loss_fn, optimizer, device):
     it = 0
     for inpt, target in data_loader: 
         it +=1
-        print(f"train {it}")
+        print(f"train_{it}")
         #blr = optimizer.param_groups[0]["lr"]
         inpt, target = inpt.to(device), target.to(device)
         y_logits = model(inpt).squeeze()
@@ -43,7 +43,7 @@ def test_epoch(model, data_loader, loss_fn, device):
     it = 0
     for inpt, target in data_loader:
         it +=1
-        print(f"test {it}")
+        print(f"test_{it}")
         inpt, target = inpt.to(device), target.to(device)
         with torch.inference_mode():
             test_logits = model(inpt).squeeze()
@@ -54,7 +54,7 @@ def test_epoch(model, data_loader, loss_fn, device):
             
     return (test_loss, test_acc)
 
-def train(model, dataset, loss_fn, optimizer, epochs, device):
+def train(model, dataset, loss_fn, optimizer, epochs, device, name):
     results = []
     
     metadata = pd.read_csv(ANNOTATIONS_FILE)
@@ -87,8 +87,17 @@ def train(model, dataset, loss_fn, optimizer, epochs, device):
             print(f"Fold: {fold} | Epoch: {epoch} | Loss: {train_loss:.5f}, Accuracy: {train_acc:.2f}% | Test loss: {test_loss:.5f}, Test acc: {test_acc:.2f}%")
             results.append([fold, epoch, train_loss.item(), train_acc, test_loss.item(), test_acc])
             
-    results_file = "Results\model_results.csv"
-
+    results_file = "Results/" + name + ".csv"
+    
+    eval_loader = DataLoader(
+            dataset=dataset,
+            batch_size=BATCH_SIZE,
+        )    
+    eval_loss, eval_acc = test_epoch(model, test_loader, loss_fn, device)
+    
+    eval_loss = eval_loss / len(test_loader)
+    eval_acc = eval_acc / len(test_loader)
+    results.append([eval_loss.item(), eval_acc])
     with open(results_file, "w", newline="") as file:
         csv_writer = csv.writer(file)
         csv_writer.writerows(results)

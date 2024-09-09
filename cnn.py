@@ -48,7 +48,7 @@ class ResNet(nn.Module):
         layers.append(ResBlock(self.in_channels, planes, i_downsample=ii_downsample, stride=stride))
         self.in_channels = planes*ResBlock.expansion
         
-        for i in range(blocks-1):
+        for i in range(1, blocks):
             layers.append(ResBlock(self.in_channels, planes))
             
         return nn.Sequential(*layers)
@@ -109,8 +109,9 @@ class Block(nn.Module):
 
       x = self.relu(self.batch_norm2(self.conv1(x)))
       x = self.batch_norm2(self.conv2(x))
-
-      if self.i_downsample is not None:
+        
+      print("identity shape ", identity.shape)
+      while self.i_downsample is not None:
           identity = self.i_downsample(identity)
       print("x shape ", x.shape)
       print("identity shape ", identity.shape)
