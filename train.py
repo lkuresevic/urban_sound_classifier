@@ -93,7 +93,7 @@ def train(model, dataset, loss_fn, optimizer, epochs, device, name):
             dataset=dataset,
             batch_size=BATCH_SIZE,
         )    
-    eval_loss, eval_acc = test_epoch(model, test_loader, loss_fn, device)
+    eval_loss, eval_acc = test_epoch(model, eval_loader, loss_fn, device)
     
     eval_loss = eval_loss / len(test_loader)
     eval_acc = eval_acc / len(test_loader)
