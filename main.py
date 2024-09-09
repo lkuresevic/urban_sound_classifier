@@ -78,7 +78,7 @@ if __name__ == "__main__":
         optimizer = torch.optim.Adam(params=model_4.parameters(), lr=LEARNING_RATE)
         train(model_4, usd, loss_fn, optimizer, EPOCHS, device, "LSTM_128_units_2_layers")
         
-        plot_results("LSTM_128_units_2_layers")
+            plot_results("LSTM_128_units_2_layers")
     else:
         exit()
    
