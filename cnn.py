@@ -1,70 +1,6 @@
 from torch import nn
 import torch
 
-class CNN(nn.Module):
-    def __init__(self, input_size, hidden_size, output_size):
-        super().__init__()
-        
-        #model_0 = CNN(input_size=1, hidden_size=16, output_size=10)
-        #Torch([batch_size, 1, 64, 44]) input
-        self.conv1 = nn.Sequential(
-            nn.Conv2d(
-                in_channels=input_size,
-                out_channels=hidden_size,
-                kernel_size=3,
-                stride=1,
-                padding=2
-            ),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2)
-        )
-        self.conv2 = nn.Sequential(
-            nn.Conv2d(
-                in_channels=hidden_size,
-                out_channels=hidden_size*2,
-                kernel_size=3,
-                stride=1,
-                padding=2
-            ),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2)
-        )
-        self.conv3 = nn.Sequential(
-            nn.Conv2d(
-                in_channels=hidden_size*2,
-                out_channels=hidden_size*4,
-                kernel_size=3,
-                stride=1,
-                padding=2
-            ),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2)
-        )
-        self.conv4 = nn.Sequential(
-            nn.Conv2d(
-                in_channels=hidden_size*4,
-                out_channels=hidden_size*8,
-                kernel_size=3,
-                stride=1,
-                padding=2
-            ),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2)
-        )
-        self.flatten = nn.Flatten()
-        self.linear = nn.Linear(hidden_size * 8 * 5 * 4, 10)
-        self.softmax = nn.Softmax(dim=1)
-
-    def forward(self, input_data):
-        x = self.conv1(input_data)
-        x = self.conv2(x)
-        x = self.conv3(x)
-        x = self.conv4(x)
-        x = self.flatten(x)
-        logits = self.linear(x)
-        predictions = self.softmax(logits)
-        return predictions
-
 class ResNet(nn.Module):
     def __init__(self, ResBlock, layer_list, output_size):
         super(ResNet, self).__init__()
@@ -152,3 +88,32 @@ class Bottleneck(nn.Module):
         x=self.relu(x)
         
         return x
+        
+class Block(nn.Module):
+    expansion = 1
+    def __init__(self, in_channels, out_channels, i_downsample=None, stride=1):
+        super(Block, self).__init__()
+       
+
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1, stride=stride, bias=False)
+        self.batch_norm1 = nn.BatchNorm2d(out_channels)
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1, stride=stride, bias=False)
+        self.batch_norm2 = nn.BatchNorm2d(out_channels)
+
+        self.i_downsample = i_downsample
+        self.stride = stride
+        self.relu = nn.ReLU()
+
+    def forward(self, x):
+      identity = x.clone()
+
+      x = self.relu(self.batch_norm2(self.conv1(x)))
+      x = self.batch_norm2(self.conv2(x))
+
+      if self.i_downsample is not None:
+          identity = self.i_downsample(identity)
+      print("x shape ", x.shape)
+      print("identity shape ", identity.shape)
+      x += identity
+      x = self.relu(x)
+      return x
