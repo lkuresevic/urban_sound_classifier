@@ -68,7 +68,7 @@ if __name__ == "__main__":
         
         plot_results("CNN_ResNet50")
     elif choice == 3: #LSTM (64 hidden, 2 layers)
-        model_3 = LSTM(44, 64, 2, 10, "lstm").to(device)
+        model_3 = LSTM(44, 64, 2, 10).to(device)
         optimizer = torch.optim.Adam(params=model_3.parameters(), lr=LEARNING_RATE)
         train(model_3, usd, loss_fn, optimizer, EPOCHS, device, "LSTM_64_units_2_layers")
         
