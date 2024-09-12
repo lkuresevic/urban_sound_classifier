@@ -14,32 +14,33 @@ from lstm import LSTM
 from constants import *
 from plot import plot_results
 
-
 if __name__ == "__main__":
     #device set to CPU while data preprocessing is performed
     device = "cpu"
-    # instantiating dataset object and creating data loader
+    
+    #setting up data pre-processing
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
         sample_rate=SAMPLE_RATE,
         n_fft=1024,
         hop_length=512,
         n_mels=128
     )
-
+    
+    # instantiating dataset object
     usd = US8K(ANNOTATIONS_FILE,
                             AUDIO_DIR,
                             mel_spectrogram,
                             SAMPLE_RATE,
                             NUM_SAMPLES,
                             device)
-                            
+
     #device moved to GPU for purposes of training
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
-    # train_dataloader = initialise_data_loader(usd, BATCH_SIZE)
-    
+    #criterion defined
     loss_fn = nn.CrossEntropyLoss()
     
+    #menu
     print(f"Choose a model for training: ")
     print(f"(0) ResNet18")
     print(f"(1) ResNet34")

@@ -1,7 +1,6 @@
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
-import torch.optim.lr_scheduler as lr_scheduler
 from sklearn.model_selection import PredefinedSplit
 import pandas as pd
 from math import ceil, floor
@@ -21,7 +20,6 @@ def train_epoch(model, data_loader, loss_fn, optimizer, device):
     for inpt, target in data_loader: 
         it +=1
         print(f"train_{it}")
-        #blr = optimizer.param_groups[0]["lr"]
         inpt, target = inpt.to(device), target.to(device)
         y_logits = model(inpt).squeeze()
         y_pred = torch.argmax(torch.round(y_logits), dim=1)
@@ -62,7 +60,9 @@ def train(model, dataset, loss_fn, optimizer, epochs, device, name):
     kf = PredefinedSplit(test_fold = folds)
     
     for fold, (train_idx, test_idx) in enumerate(kf.split(dataset)):
-    
+        #instantiate new model for every fold
+        model_active = copy.deepcopy(model)
+        
         train_loader = DataLoader(
             dataset=dataset,
             batch_size=BATCH_SIZE,
@@ -86,13 +86,13 @@ def train(model, dataset, loss_fn, optimizer, epochs, device, name):
             
     results_file = "Results/" + name + "_results.csv"
     
-    eval_loader = DataLoader(
-            dataset=dataset,
-            batch_size=BATCH_SIZE)    
-    eval_loss, eval_acc = test_epoch(model, eval_loader, loss_fn, device)
-    eval_loss = eval_loss / len(eval_loader)
-    eval_acc = eval_acc / len(eval_loader)
-    results.append([eval_loss.item(), eval_acc])
+    # eval_loader = DataLoader(
+            # dataset=dataset,
+            # batch_size=BATCH_SIZE)    
+    # eval_loss, eval_acc = test_epoch(model, eval_loader, loss_fn, device)
+    # eval_loss = eval_loss / len(eval_loader)
+    # eval_acc = eval_acc / len(eval_loader)
+    # results.append([eval_loss.item(), eval_acc])
         
     with open(results_file, "w", newline="") as file:
         csv_writer = csv.writer(file)

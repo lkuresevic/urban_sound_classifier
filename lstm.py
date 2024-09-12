@@ -7,12 +7,12 @@ class LSTM(nn.Module):
         super(LSTM, self).__init__()
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-        self.lstm = nn.LSTM(input_size, self.hidden_size, self.num_layers, batch_first=True, dropout=0.2)
+        self.lstm = nn.LSTM(input_size, self.hidden_size, self.num_layers, batch_first=True, dropy=0.2)
        
-        self.fc1 = nn.Linear(hidden_size, int(hidden_size/2))
+        self.fully_connected_1 = nn.Linear(hidden_size, int(hidden_size/2))
+        self.fully_connected_2 = nn.Linear(int(hidden_size/2), int(hidden_size/2))
+        self.fully_connected_3 = nn.Linear(int(hidden_size/2), num_classes)
         self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(int(hidden_size/2), int(hidden_size/2))
-        self.fc3 = nn.Linear(int(hidden_size/2), num_classes)
     
     def forward(self, x):
         x = x.squeeze()
@@ -20,8 +20,8 @@ class LSTM(nn.Module):
         torch.manual_seed(42)
         h0 = Variable(torch.rand(self.num_layers, x.size(0), self.hidden_size).float()).cuda() 
         c0 = Variable(torch.rand(self.num_layers, x.size(0), self.hidden_size).float()).cuda()
-        out, _ = self.lstm(x, (h0,c0)) 
-        out = self.relu(self.fc1(out[:, -1, :]))
-        out = self.relu(self.fc2(out))
-        out = self.fc3(out) 
-        return out
+        y, _ = self.lstm(x, (h0,c0)) 
+        y = self.relu(self.fully_connected_1(y[:, -1, :]))
+        y = self.relu(self.fully_connected_2(y))
+        y = self.fully_connected_3(y) 
+        return y
