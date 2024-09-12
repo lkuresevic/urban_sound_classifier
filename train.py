@@ -61,8 +61,7 @@ def train(model, dataset, loss_fn, optimizer, epochs, device, name):
     
     for fold, (train_idx, test_idx) in enumerate(kf.split(dataset)):
         #instantiate new model for every fold
-        model_active = copy.deepcopy(model)
-        
+            
         train_loader = DataLoader(
             dataset=dataset,
             batch_size=BATCH_SIZE,
@@ -83,7 +82,7 @@ def train(model, dataset, loss_fn, optimizer, epochs, device, name):
             
             print(f"Fold: {fold+1} | Epoch: {epoch+1} | Loss: {train_loss:.5f}, Accuracy: {train_acc:.2f}% | Test loss: {test_loss:.5f}, Test acc: {test_acc:.2f}%")
             results.append([fold+1, fold*epochs + epoch+1, train_loss.item(), train_acc, test_loss.item(), test_acc])
-            
+        
     results_file = "Results/" + name + "_results.csv"
     
     # eval_loader = DataLoader(
@@ -96,4 +95,4 @@ def train(model, dataset, loss_fn, optimizer, epochs, device, name):
         
     with open(results_file, "w", newline="") as file:
         csv_writer = csv.writer(file)
-        csv_writer.writerows(results)
+        csv_writer.writerows(results)   
