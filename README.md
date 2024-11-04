@@ -23,10 +23,9 @@ converted into a Mel spectrogram. The spectrogram provides a time-frequency
 representation of the sound, capturing both temporal dynamics and frequency
 content, which are to be used for discriminating between different sound classes.
 Key parameters include:
-* • n fft: 1024 (size of fast Fourier transforms window)
-* • hop length: 512 (distance between frames)
-* • n mels: 128 (number of Mel bands)
-* 
+* n fft: 1024 (size of fast Fourier transforms window)
+* hop length: 512 (distance between frames)
+* n mels: 128 (number of Mel bands)
 # 3. Model Selection
 For this study, we selected both convolutional and recurrent neural network
 architectures for their distinct strengths in capturing different aspects of audio
@@ -37,14 +36,10 @@ data.
 ResNet CNNs are known for their powerful feature extraction capabilities due to
 their deep architectures and residual connections, and have proven to perform
 well at image classification tasks. We considered four variants:
-* • ResNet18: A relatively shallow network with 18 layers, often used as a
-  baseline due to its lower computational complexity.
-* • ResNet34: Aslightly deeper version, still employing basic residual blocks
-  but with increased depth for better feature extraction.
-  • ResNet50: Employs bottleneck blocks, increasing depth and feature rep
-  resentation without a proportional increase in computation.
-  • ResNet101: The deepest model in our comparison, with 101 layers and
-  bottleneck blocks, aimed at extracting the most detailed features.
+* ResNet18: A relatively shallow network with 18 layers, often used as a baseline due to its lower computational complexity.
+* ResNet34: Aslightly deeper version, still employing basic residual block, but with increased depth for better feature extraction.
+* ResNet50: Employs bottleneck blocks, increasing depth and feature representation without a proportional increase in computation.
+* ResNet101: The deepest model in our comparison, with 101 layers and bottleneck blocks, aimed at extracting the most detailed features.
   
 **3.1.1 Preliminary experiments**
 
@@ -66,10 +61,8 @@ LSTMs are designed to remember long-term dependencies, making them effec
 tive at modeling sequential data, which audio is. For this task, we configured
 the LSTM models with two different hidden layer sizes (64 and 128 units) and
 used two LSTM layers:
-  • LSTM (64 units, 2 layers): A smaller LSTM architecture to capture
-  temporal dependencies with fewer parameters.
-  • LSTM (128 units, 2 layers): A larger LSTM configuration to better
-  capture complex dependencies in sound sequences.
+* LSTM (64 units, 2 layers): A smaller LSTM architecture to capture temporal dependencies with fewer parameters.
+* LSTM (128 units, 2 layers): A larger LSTM configuration to better capture complex dependencies in sound sequences.
   
 **3.2.1 Preliminary experiments**
 
