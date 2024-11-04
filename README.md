@@ -75,7 +75,10 @@ disregarded as it failed to show improvements that would justify the increase in
 training time.
 
 # Experimental Setup
-placeholder
+
+**!!! The experiments should be conducted anew with corrected 10-fold validation !!!**
+
+*(missing line resulted in overfitting)*
 # Results
 placeholder
 # Discussion
