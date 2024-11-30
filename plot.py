@@ -5,7 +5,7 @@ def plot_results(model_name):
     epochs, loss, acc, test_loss, test_acc = [], [], [], [], []
     
     # Open and read the CSV file
-    with open(f'Results/' + model_name +'_results.csv', 'r') as csvfile: 
+    with open(f'Results/' + model_name + "_results.csv", 'r') as csvfile: 
         data = csv.reader(csvfile, delimiter=',')
         
         # Read each row and convert to the appropriate data type
@@ -30,4 +30,5 @@ def plot_results(model_name):
     plt.ylabel('Value')
     plt.legend()
     plt.grid(True)
+    plt.savefig(f'Plots/' + model_name +'_results.png')
     plt.show()

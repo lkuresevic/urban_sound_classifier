@@ -34,7 +34,7 @@ if __name__ == "__main__":
                             NUM_SAMPLES,
                             device)
 
-    #device moved to GPU for purposes of training
+    #device moved to GPU for training purposes
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
     #criterion defined
@@ -54,35 +54,25 @@ if __name__ == "__main__":
         model_0 = ResNet(Block, [2, 2, 2, 2], 10).to(device)
         optimizer = torch.optim.Adam(params=model_0.parameters(), lr=LEARNING_RATE)
         train(model_0, usd, loss_fn, optimizer, EPOCHS, device, "CNN_ResNet18")
-        
-        plot_results("CNN_ResNet18")
     elif choice == 1: #CNN - ResNet34
         model_1 = ResNet(Block, [3, 4, 6, 3], 10).to(device)
         optimizer = torch.optim.Adam(params=model_1.parameters(), lr=LEARNING_RATE)
         train(model_1, usd, loss_fn, optimizer, EPOCHS, device, "CNN_ResNet34")
-        
-        plot_results("CNN_ResNet34")
     elif choice == 2: #CNN - ResNet50
         model_2 = ResNet(Bottleneck, [3, 4, 6, 3], 10).to(device)
         optimizer = torch.optim.Adam(params=model_2.parameters(), lr=LEARNING_RATE)
         train(model_2, usd, loss_fn, optimizer, EPOCHS, device, "CNN_ResNet50")
-        
-        plot_results("CNN_ResNet50")
     elif choice == 3: #LSTM (64 hidden, 2 layers)
         model_3 = LSTM(44, 64, 2, 10).to(device)
         optimizer = torch.optim.Adam(params=model_3.parameters(), lr=LEARNING_RATE)
         train(model_3, usd, loss_fn, optimizer, EPOCHS, device, "LSTM_64_units_2_layers")
-        
-        plot_results("LSTM_64_units_2_layers")
     elif choice == 4: #LSTM (128 hidden, 2 layers)
         model_4 = LSTM(44, 128, 2, 10).to(device)
         optimizer = torch.optim.Adam(params=model_4.parameters(), lr=LEARNING_RATE)
         train(model_4, usd, loss_fn, optimizer, EPOCHS, device, "LSTM_128_units_2_layers")
-        
-        plot_results("LSTM_128_units_2_layers")
     else:
         exit()
    
-    print(f"Succesfully trained")
+    print(f"Successfully trained")
     
    
