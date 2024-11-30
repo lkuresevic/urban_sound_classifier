@@ -98,9 +98,9 @@ def train(model, dataset, loss_fn, optimizer, epochs, device, name):
         
         plot_results(name + "_" + str(fold+1))
         
-        overall_train_loss += train_loss
+        overall_train_loss += train_loss.item()
         overall_train_acc += train_acc 
-        overall_test_loss += test_loss
+        overall_test_loss += test_loss.item()
         overall_test_acc += test_acc
         
     overall_train_loss *= 0.1
@@ -111,7 +111,7 @@ def train(model, dataset, loss_fn, optimizer, epochs, device, name):
     print(f"Fold: {fold+1} | Epoch: {epoch+1} | Loss: {overall_train_loss:.5f}, Accuracy: {overall_train_acc:.2f}% | Test loss: {overall_test_loss:.5f}, Test acc: {overall_test_acc:.2f}%")
     with open("Results/" + name + "_results.csv", "w", newline="") as file:
         csv_writer = csv.writer(file)
-        csv_writer.writerows([overall_train_loss, overall_train_acc, overall_test_loss, overall_test_acc])
+        csv_writer.writerow([overall_train_loss, overall_train_acc, overall_test_loss, overall_test_acc])
     
     
     # eval_loader = DataLoader(

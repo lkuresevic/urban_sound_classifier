@@ -18,7 +18,7 @@ def plot_results(model_name):
                 test_acc.append(float(row[5]))
             except ValueError:
                 continue
-
+    
     # Plotting the results
     plt.plot(epochs, loss, label='Training Loss', marker='o')
     plt.plot(epochs, test_loss, label='Test Loss', marker='o')
@@ -31,4 +31,3 @@ def plot_results(model_name):
     plt.legend()
     plt.grid(True)
     plt.savefig(f'Plots/' + model_name +'_results.png')
-    plt.show()
