@@ -7,7 +7,7 @@ class LSTM(nn.Module):
         super(LSTM, self).__init__()
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-        self.lstm = nn.LSTM(input_size, self.hidden_size, self.num_layers, batch_first=True, dropy=0.2)
+        self.lstm = nn.LSTM(input_size, self.hidden_size, self.num_layers, batch_first=True, dropout=0.2)
        
         self.fully_connected_1 = nn.Linear(hidden_size, int(hidden_size/2))
         self.fully_connected_2 = nn.Linear(int(hidden_size/2), int(hidden_size/2))

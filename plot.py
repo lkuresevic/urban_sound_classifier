@@ -31,3 +31,4 @@ def plot_results(model_name):
     plt.legend()
     plt.grid(True)
     plt.savefig(f'Plots/' + model_name +'_results.png')
+    plt.close('all')
