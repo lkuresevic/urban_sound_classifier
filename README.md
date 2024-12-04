@@ -11,7 +11,7 @@ environmental sounds. Specifically, we evaluate ResNet-based CNNs (ResNet18,
 ResNet34, ResNet50, and ResNet101) and LSTMs to understand their relative
 performance
 # Dataset Overview
-The UrbanSound8K dataset is a widely used benchmark for environmental
+The [UrbanSound8K](https://urbansounddataset.weebly.com/urbansound8k.html) dataset is a widely used benchmark for environmental
 sound classification tasks. It contains 8732 audio files, each labeled as one
 of 10 different classes. The dataset is organized into 10 folds, allowing for cross
 validation. All excerpts are taken from field recordings uploaded to [www.freesound.org](https://freesound.org/),
