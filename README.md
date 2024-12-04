@@ -33,4 +33,4 @@ Key parameters include:
 # Repository Overview
 * **\Plots**: A folder containing plots of training and testing accuracies of each of the models trained during the experiment.
 * **\Results**: A folder containing .csv files storing experiment outcomes.
-* **\**: Python scripts.
+* **\.**: Python scripts.
