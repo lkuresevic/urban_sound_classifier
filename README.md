@@ -26,62 +26,6 @@ Key parameters include:
 * n fft: 1024 (size of fast Fourier transforms window)
 * hop length: 512 (distance between frames)
 * n mels: 128 (number of Mel bands)
-# 3. Model Selection
-For this study, we selected both convolutional and recurrent neural network
-architectures for their distinct strengths in capturing different aspects of audio
-data.
-
-**3.1 ResNet Architectures**
-
-ResNet CNNs are known for their powerful feature extraction capabilities due to
-their deep architectures and residual connections, and have proven to perform
-well at image classification tasks. We considered four variants:
-* ResNet18: A relatively shallow network with 18 layers, often used as a baseline due to its lower computational complexity.
-* ResNet34: Aslightly deeper version, still employing basic residual block, but with increased depth for better feature extraction.
-* ResNet50: Employs bottleneck blocks, increasing depth and feature representation without a proportional increase in computation.
-* ResNet101: The deepest model in our comparison, with 101 layers and bottleneck blocks, aimed at extracting the most detailed features.
-  
-**3.1.1 Preliminary experiments**
-
-During preliminary experiments, both ResNet50 and ResNet101 showed a ten
-dency towards overfitting, with ResNet101 struggling to reach accuracy above
-50% outside its training set. In the case of our relatively small dataset, this
-opposed the hypothesis that more complex networks extract more detailed fea
-tures. For this reason, we dropped ResNet101 out of consideration for final
-training cycles, but stuck with ResNet50 in case that it generalizes better over
-a longer training period.
-Whencomparing efficiency of ResNet18 and ResNet34 over a smaller number
-of training epochs, the simpler model converged faster once again, regardless of
-different hyperparameters. Hence, ResNet18 was chosen to be trained in the
-final experiment.
-
-**3.2 Long Short-Term Memory (LSTMs) Networks**
-
-LSTMs are designed to remember long-term dependencies, making them effec
-tive at modeling sequential data, which audio is. For this task, we configured
-the LSTM models with two different hidden layer sizes (64 and 128 units) and
-used two LSTM layers:
-* LSTM (64 units, 2 layers): A smaller LSTM architecture to capture temporal dependencies with fewer parameters.
-* LSTM (128 units, 2 layers): A larger LSTM configuration to better capture complex dependencies in sound sequences.
-  
-**3.2.1 Preliminary experiments**
-
-Having noticed a tendency of CNNs to overfit training data across trial experi
-ments, we configured the LSTMs with a dropout rate of 0.2- this improved test
-accuracy over a smaller number of epochs and effectively prevented the model
-from overfitting training sets.
-Introduction of more LSTM cells per model was considered, but ultimately
-disregarded as it failed to show improvements that would justify the increase in
-training time.
-
-# Experimental Setup
-
-**!!! The experiments should be conducted anew with corrected 10-fold validation !!!**
-
-*(missing line resulted in overfitting)*
-# Results
-placeholder
-# Discussion
-placeholder
-# Conclusion
-placeholder
+[Mel Spectogram Example](https://storage.googleapis.com/kagglesdsdata/datasets/4164536/7202367/archive/fold3/107228-5-0-3.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20241204%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20241204T225732Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=2512c8577fb010f4dff19fc9b7c9e1d57309453f5fa4eb96db6dce709e4e1d429187a7e4404056eac421091fb0b7cb717470f77cfdb4f92e1378f45c4d84c1edfa62811851616015e85aaae91b491c8c9105ed047dc8bcbd5003a95a8a12bc661a0330372e123c1753604f1a22a9cb9c21e09a31ce381c4f19beb17ea9b33fdd787e3d257d1276bf9dd8076c5d17dde99e9aa90fcf013485e9ec18e33436aceed4a8e52e26f8e85cf31388d3b1902a4e4d5ba4b4e4984497a844784c1f4ae371c8c79a0a40a2a7b15a45e6e66776259f81a2e05be233394e3e014b5af92ef0edcc0bcbf1a25d2bd7740c296c6426044679409008ef5b75e6d87a8a7282dc3aa4)
+# Project Paper
+You can read about the experiment in the [project paper](https://github.com/lkuresevic/urban_sound_classifier/blob/main/Comparing%20CNN%20and%20LSTM%20Architectures%20for%20Environmental%20Sound%20Classification.pdf)
